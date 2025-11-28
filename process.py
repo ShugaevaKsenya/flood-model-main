@@ -67,6 +67,7 @@ def fill_diagrams(data, initial_equations, restrictions):
                 show_both_lines=True
             )
 
+
 def create_graphic(t, data):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(20, 16))
     
@@ -91,7 +92,7 @@ def create_graphic(t, data):
               '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#ff1493', '#00ced1']
     
     for i in range(6):
-        y_data = data[:, i]  
+        y_data = np.clip(data[:, i], 0, 1.0)
         line = ax1.plot(t, y_data, color=colors[i], linewidth=2.5, label=labels[i])
         
         mid_idx = len(t) // 2
@@ -101,7 +102,7 @@ def create_graphic(t, data):
                     bbox=dict(boxstyle="round,pad=0.1", facecolor='white', alpha=0.7, edgecolor='none'))
     
     ax1.set_xlim([0, 1])
-    ax1.set_ylim([0, 1.2])  
+    ax1.set_ylim([0, 1.0])
     ax1.set_ylabel("Значения характеристик", fontsize=14, fontweight='bold')
     ax1.set_title("График 1: Характеристики системы (X1-X6)", fontsize=16, fontweight='bold', pad=20)
     ax1.legend(loc='upper left', fontsize=12, framealpha=0.9, 
@@ -112,7 +113,7 @@ def create_graphic(t, data):
     ax1.axhline(y=1.0, color='red', linestyle=':', alpha=0.7, linewidth=1, label='Предел')
     
     for i in range(6, 12):
-        y_data = data[:, i] 
+        y_data = np.clip(data[:, i], 0, 1.0)
         line = ax2.plot(t, y_data, color=colors[i], linewidth=2.5, label=labels[i])
         
         mid_idx = len(t) // 2
@@ -122,7 +123,7 @@ def create_graphic(t, data):
                     bbox=dict(boxstyle="round,pad=0.1", facecolor='white', alpha=0.7, edgecolor='none'))
     
     ax2.set_xlim([0, 1])
-    ax2.set_ylim([0, 1.2])  
+    ax2.set_ylim([0, 1.0])
     ax2.set_xlabel("t, время", fontsize=14, fontweight='bold')
     ax2.set_ylabel("Значения характеристик", fontsize=14, fontweight='bold')
     ax2.set_title("График 2: Характеристики системы (X7-X12)", fontsize=16, fontweight='bold', pad=20)
@@ -136,6 +137,7 @@ def create_graphic(t, data):
     plt.tight_layout(pad=3.0)
     fig.savefig('./static/images/figure.png', bbox_inches='tight', dpi=150)
     plt.close(fig)
+
 
 def cast_to_float(initial_equations, faks, equations, restrictions):
     for i in range(len(initial_equations)):
@@ -154,6 +156,7 @@ def cast_to_float(initial_equations, faks, equations, restrictions):
 
     return initial_equations, faks, restrictions
 
+
 def process(initial_equations, faks, equations, restrictions):
     global data_sol
 
@@ -170,6 +173,7 @@ def process(initial_equations, faks, equations, restrictions):
     create_disturbances_graphic(t, faks)  
     fill_diagrams(data_sol, initial_equations, restrictions)
 
+
 u_list = [
     "Численность группировки сил, участвующих в аварийно-спасательных работах",
     "Количество жилых домов, разрушенных и поврежденных в результате наводнения",
@@ -185,8 +189,10 @@ u_list = [
     "Ущерб оборотным производственным фондам в зоне затопления"
 ]
 
+
 def f3(x, params):
     return params[0] * x ** 3 + params[1] * x ** 2 + params[2] * x + params[3]
+
 
 def create_disturbances_graphic(t, faks):
     fig, axs = plt.subplots(figsize=(16, 10))
