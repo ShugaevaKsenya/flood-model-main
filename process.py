@@ -136,6 +136,7 @@ def create_graphic(t, data):
     plt.tight_layout(pad=3.0)
     fig.savefig('./static/images/figure.png', bbox_inches='tight', dpi=150)
     plt.close(fig)
+
 def cast_to_float(initial_equations, faks, equations, restrictions):
     for i in range(len(initial_equations)):
         initial_equations[i] = float(initial_equations[i])
